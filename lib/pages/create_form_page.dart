@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:form_craft/components/form_title_description.dart';
 import 'package:form_craft/components/question_type.dart';
 import 'package:form_craft/utils/question_type.dart';
 
@@ -31,10 +32,7 @@ class _CreateFormPageState extends State<CreateFormPage> {
   //   });
   // }
 
-  void _addQuestion(QuestionType type) {
-    // TODO: Implement question adding logic
-    print('Adding question of type: \$type');
-  }
+  void _addQuestion(QuestionType type) {}
 
   @override
   Widget build(BuildContext context) {
@@ -100,17 +98,20 @@ class _CreateFormPageState extends State<CreateFormPage> {
           const SizedBox(width: 16),
         ],
       ),
-      body: Stack(
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Center(child: Text('This is the form creation page.')),
-
-          Positioned(
-            left: 0,
-            top: 0,
-            bottom: 0,
-            child: SizedBox(
-              width: 250,
-              child: QuestionTypesSidebar(onAddQuestion: _addQuestion),
+          SizedBox(
+            width: 250,
+            child: QuestionTypesSidebar(onAddQuestion: _addQuestion),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: FormTitleDescription(titleController: _titleController),
+              ),
             ),
           ),
         ],
