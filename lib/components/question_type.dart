@@ -1,13 +1,5 @@
 import 'package:flutter/material.dart';
-
-enum QuestionType {
-  shortText,
-  longText,
-  multipleChoice,
-  checkbox,
-  dropdown,
-  date,
-}
+import 'package:form_craft/utils/question_type.dart';
 
 class QuestionTypesSidebar extends StatelessWidget {
   final void Function(QuestionType) onAddQuestion;
@@ -106,7 +98,9 @@ class _QuestionButtonState extends State<_QuestionButton> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryGreen = Colors.green[700]!;
+    final hoverColor = Theme.of(context).primaryColor;
+    final onHoverColor = Theme.of(context).colorScheme.onPrimary;
+    final defaultColor = Theme.of(context).colorScheme.onSurface;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hovering = true),
@@ -116,9 +110,9 @@ class _QuestionButtonState extends State<_QuestionButton> {
         padding: const EdgeInsets.symmetric(
           vertical: 8,
           horizontal: 12,
-        ), // slightly smaller padding
+        ),
         decoration: BoxDecoration(
-          color: _hovering ? primaryGreen : Colors.transparent,
+          color: _hovering ? hoverColor : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
         ),
         child: InkWell(
@@ -129,21 +123,21 @@ class _QuestionButtonState extends State<_QuestionButton> {
               Icon(
                 widget.icon,
                 size: 18,
-                color: _hovering ? Colors.white : Colors.black,
+                color: _hovering ? onHoverColor : defaultColor,
               ),
               const SizedBox(width: 8),
               Text(
                 widget.label,
                 style: TextStyle(
                   fontSize: 14,
-                  color: _hovering ? Colors.white : Colors.black,
+                  color: _hovering ? onHoverColor : defaultColor,
                 ),
               ),
               const Spacer(),
               Icon(
                 Icons.add,
                 size: 16,
-                color: _hovering ? Colors.white : Colors.black,
+                color: _hovering ? onHoverColor : defaultColor,
               ),
             ],
           ),
