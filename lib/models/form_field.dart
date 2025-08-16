@@ -5,11 +5,13 @@ class FormFieldModel {
   final QuestionType type;
   String question;
   List<String> options;
+  bool isRequired;
 
   FormFieldModel({
     required this.id,
     required this.type,
     this.question = 'Question',
     this.options = const ['Option 1'],
+    this.isRequired = false,
   });
 }

@@ -5,12 +5,14 @@ class LongAnswerQuestion extends StatelessWidget {
   final FormFieldModel field;
   final VoidCallback onDelete;
   final ValueChanged<String> onChanged;
+  final ValueChanged<bool> onRequiredChanged;
 
   const LongAnswerQuestion({
     super.key,
     required this.field,
     required this.onDelete,
     required this.onChanged,
+    required this.onRequiredChanged,
   });
 
   @override
@@ -45,11 +47,18 @@ class LongAnswerQuestion extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             const TextField(
+              readOnly: true,
               maxLines: 4,
               decoration: InputDecoration(
                 hintText: 'Long answer text',
                 border: OutlineInputBorder(),
               ),
+            ),
+            const Divider(),
+            SwitchListTile(
+              title: const Text('Required'),
+              value: field.isRequired,
+              onChanged: onRequiredChanged,
             ),
           ],
         ),

@@ -5,12 +5,14 @@ class DateQuestion extends StatelessWidget {
   final FormFieldModel field;
   final VoidCallback onDelete;
   final ValueChanged<String> onChanged;
+  final ValueChanged<bool> onRequiredChanged;
 
   const DateQuestion({
     super.key,
     required this.field,
     required this.onDelete,
     required this.onChanged,
+    required this.onRequiredChanged,
   });
 
   @override
@@ -55,6 +57,12 @@ class DateQuestion extends StatelessWidget {
                   lastDate: DateTime.now(),
                 );
               },
+            ),
+            const Divider(),
+            SwitchListTile(
+              title: const Text('Required'),
+              value: field.isRequired,
+              onChanged: onRequiredChanged,
             ),
           ],
         ),

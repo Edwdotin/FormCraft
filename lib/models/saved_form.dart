@@ -4,10 +4,12 @@ class SavedForm {
   final String title;
   final String description;
   final List<FormFieldModel> fields;
+  bool isSubmitted;
 
   SavedForm({
     required this.title,
     required this.description,
     required this.fields,
+    this.isSubmitted = false,
   });
 }

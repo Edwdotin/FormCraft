@@ -85,6 +85,12 @@ class _CreateFormPageState extends State<CreateFormPage> {
     });
   }
 
+  void _updateRequiredStatus(int id, bool isRequired) {
+    setState(() {
+      _fields.firstWhere((field) => field.id == id).isRequired = isRequired;
+    });
+  }
+
   Widget _buildQuestionWidget(FormFieldModel field) {
     switch (field.type) {
       case QuestionType.shortText:
@@ -92,12 +98,14 @@ class _CreateFormPageState extends State<CreateFormPage> {
           field: field,
           onDelete: () => _deleteQuestion(field.id),
           onChanged: (value) => _updateQuestion(field.id, value),
+          onRequiredChanged: (value) => _updateRequiredStatus(field.id, value),
         );
       case QuestionType.longText:
         return LongAnswerQuestion(
           field: field,
           onDelete: () => _deleteQuestion(field.id),
           onChanged: (value) => _updateQuestion(field.id, value),
+          onRequiredChanged: (value) => _updateRequiredStatus(field.id, value),
         );
       case QuestionType.checkbox:
         return CheckboxQuestion(
@@ -109,6 +117,7 @@ class _CreateFormPageState extends State<CreateFormPage> {
           onAddOption: () => _addOption(field.id),
           onRemoveOption: (optionIndex) =>
               _removeOption(field.id, optionIndex),
+          onRequiredChanged: (value) => _updateRequiredStatus(field.id, value),
         );
       case QuestionType.multipleChoice:
         return MultipleChoiceQuestion(
@@ -120,6 +129,7 @@ class _CreateFormPageState extends State<CreateFormPage> {
           onAddOption: () => _addOption(field.id),
           onRemoveOption: (optionIndex) =>
               _removeOption(field.id, optionIndex),
+          onRequiredChanged: (value) => _updateRequiredStatus(field.id, value),
         );
       case QuestionType.dropdown:
         return DropdownQuestion(
@@ -131,12 +141,14 @@ class _CreateFormPageState extends State<CreateFormPage> {
           onAddOption: () => _addOption(field.id),
           onRemoveOption: (optionIndex) =>
               _removeOption(field.id, optionIndex),
+          onRequiredChanged: (value) => _updateRequiredStatus(field.id, value),
         );
       case QuestionType.date:
         return DateQuestion(
           field: field,
           onDelete: () => _deleteQuestion(field.id),
           onChanged: (value) => _updateQuestion(field.id, value),
+          onRequiredChanged: (value) => _updateRequiredStatus(field.id, value),
         );
       default:
         return Container();
@@ -254,14 +266,17 @@ class _CreateFormPageState extends State<CreateFormPage> {
                       itemCount: _fields.length,
                       itemBuilder: (context, index) {
                         final field = _fields[index];
-                        return Row(
+                        return Padding(
                           key: ValueKey(field.id),
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('${index + 1}.'),
-                            const SizedBox(width: 8),
-                            Expanded(child: _buildQuestionWidget(field)),
-                          ],
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('${index + 1}.'),
+                              const SizedBox(width: 8),
+                              Expanded(child: _buildQuestionWidget(field)),
+                            ],
+                          ),
                         );
                       },
                       onReorder: (int oldIndex, int newIndex) {

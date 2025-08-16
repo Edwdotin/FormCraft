@@ -10,6 +10,7 @@ class MultipleChoiceQuestion extends StatelessWidget {
   final ValueChanged<int> onRemoveOption;
   final OptionChangedCallback onOptionChanged;
   final VoidCallback onAddOption;
+  final ValueChanged<bool> onRequiredChanged;
 
   const MultipleChoiceQuestion({
     super.key,
@@ -19,6 +20,7 @@ class MultipleChoiceQuestion extends StatelessWidget {
     required this.onRemoveOption,
     required this.onOptionChanged,
     required this.onAddOption,
+    required this.onRequiredChanged,
   });
 
   @override
@@ -75,6 +77,12 @@ class MultipleChoiceQuestion extends StatelessWidget {
               icon: const Icon(Icons.add),
               label: const Text('Add Option'),
               onPressed: onAddOption,
+            ),
+            const Divider(),
+            SwitchListTile(
+              title: const Text('Required'),
+              value: field.isRequired,
+              onChanged: onRequiredChanged,
             ),
           ],
         ),
