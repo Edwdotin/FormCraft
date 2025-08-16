@@ -25,7 +25,7 @@ class _AttendFormPageState extends State<AttendFormPage> {
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.of(context).pop(true);
+      Navigator.of(context).pop(_answers);
     }
   }
 
@@ -98,9 +98,7 @@ class _AttendFormPageState extends State<AttendFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.form.title),
-      ),
+      appBar: AppBar(title: Text(widget.form.title)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Form(
@@ -208,9 +206,12 @@ class _CheckboxAnswerState extends State<_CheckboxAnswer> {
                 padding: const EdgeInsets.only(top: 8.0, left: 12.0),
                 child: Text(
                   state.errorText!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                    fontSize: 12,
+                  ),
                 ),
-              )
+              ),
           ],
         );
       },
@@ -263,9 +264,12 @@ class _MultipleChoiceAnswerState extends State<_MultipleChoiceAnswer> {
                 padding: const EdgeInsets.only(top: 8.0, left: 12.0),
                 child: Text(
                   state.errorText!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                    fontSize: 12,
+                  ),
                 ),
-              )
+              ),
           ],
         );
       },
@@ -302,9 +306,11 @@ class _DateAnswerState extends State<_DateAnswer> {
           children: [
             OutlinedButton.icon(
               icon: const Icon(Icons.calendar_today),
-              label: Text(_selectedDate == null
-                  ? 'Select Date'
-                  : '${_selectedDate!.toLocal()}'.split(' ')[0]),
+              label: Text(
+                _selectedDate == null
+                    ? 'Select Date'
+                    : '${_selectedDate!.toLocal()}'.split(' ')[0],
+              ),
               onPressed: () async {
                 final pickedDate = await showDatePicker(
                   context: context,
@@ -325,9 +331,12 @@ class _DateAnswerState extends State<_DateAnswer> {
                 padding: const EdgeInsets.only(top: 8.0, left: 12.0),
                 child: Text(
                   state.errorText!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                    fontSize: 12,
+                  ),
                 ),
-              )
+              ),
           ],
         );
       },

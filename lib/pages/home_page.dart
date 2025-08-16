@@ -3,6 +3,7 @@ import 'package:form_craft/context/theme_provider.dart';
 import 'package:form_craft/models/saved_form.dart';
 import 'package:form_craft/pages/create_form_page.dart';
 import 'package:form_craft/pages/attend_form_page.dart';
+import 'package:form_craft/pages/view_answers_page.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,17 +29,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _navigateToAttendFormPage(int index) async {
-    final result = await Navigator.of(context).push(
+    final Map<int, dynamic>? answers = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => AttendFormPage(form: _savedForms[index]),
       ),
     );
 
-    if (result == true) {
+    if (answers != null) {
       setState(() {
         _savedForms[index].isSubmitted = true;
+        _savedForms[index].answers = answers;
       });
     }
+  }
+
+  void _navigateToViewAnswersPage(int index) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ViewAnswersPage(form: _savedForms[index]),
+      ),
+    );
   }
 
   void _deleteForm(int index) {
@@ -130,9 +140,13 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 final form = _savedForms[index];
                 return InkWell(
-                  onTap: form.isSubmitted
-                      ? null
-                      : () => _navigateToAttendFormPage(index),
+                  onTap: () {
+                    if (form.isSubmitted) {
+                      _navigateToViewAnswersPage(index);
+                    } else {
+                      _navigateToAttendFormPage(index);
+                    }
+                  },
                   child: Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -215,6 +229,23 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12,
                                   ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (form.isSubmitted)
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              color: Colors.black.withOpacity(0.6),
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: TextButton(
+                                onPressed: () => _navigateToViewAnswersPage(index),
+                                child: const Text(
+                                  'View Answers',
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),

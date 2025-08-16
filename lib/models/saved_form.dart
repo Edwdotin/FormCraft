@@ -5,11 +5,13 @@ class SavedForm {
   final String description;
   final List<FormFieldModel> fields;
   bool isSubmitted;
+  Map<int, dynamic> answers;
 
   SavedForm({
     required this.title,
     required this.description,
     required this.fields,
     this.isSubmitted = false,
+    this.answers = const {},
   });
 }
