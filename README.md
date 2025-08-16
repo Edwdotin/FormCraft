@@ -73,7 +73,10 @@ The app is designed to work and maintain visual consistency on:
 1.  **Enable web support (if not already enabled):**
     ```bash
     flutter config --enable-web
-    ```
+    ``<img width="1911" height="897" alt="Screenshot 2025-08-16 170136" src="https://github.com/user-attachments/assets/04b67e99-c2bc-4853-9ca5-f4e2762e7399" />
+<img width="1918" height="907" alt="Screenshot 2024-09-27 114150" src="https://github.com/user-attachments/assets/69e250ff-08a2-49f7-8671-0ef00a57f96e" />
+<img width="1918" height="902" alt="lighttheme" src="https://github.com/user-attachments/assets/872272ba-d591-4224-99f5-f4fe7b925175" />
+`
 2.  **Run the app in a web browser:**
     ```bash
     flutter run -d chrome
