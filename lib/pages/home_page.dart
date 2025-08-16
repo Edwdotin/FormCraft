@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_craft/context/theme_provider.dart';
+import 'package:form_craft/models/saved_form.dart';
 import 'package:form_craft/pages/create_form_page.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final List<SavedForm> _savedForms = [];
+
+  void _navigateToCreateFormPage() async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const CreateFormPage()),
+    );
+
+    if (result != null && result is SavedForm) {
+      setState(() {
+        _savedForms.add(result);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
@@ -61,18 +76,45 @@ class _HomePageState extends State<HomePage> {
                   vertical: 10,
                 ),
               ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const CreateFormPage()),
-                );
-              },
+              onPressed: _navigateToCreateFormPage,
             ),
           ),
         ],
       ),
-      body: const Center(
-        child: Text('Hello Wold!', style: TextStyle(fontSize: 20)),
-      ),
+      body: _savedForms.isEmpty
+          ? const Center(
+              child: Text('No forms created yet.', style: TextStyle(fontSize: 20)),
+            )
+          : GridView.builder(
+              padding: const EdgeInsets.all(16.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 16.0,
+                mainAxisSpacing: 16.0,
+              ),
+              itemCount: _savedForms.length,
+              itemBuilder: (context, index) {
+                final form = _savedForms[index];
+                return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          form.title,
+                          style: Theme.of(context).textTheme.titleLarge,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 8),
+                        Text('${form.fields.length} questions'),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }

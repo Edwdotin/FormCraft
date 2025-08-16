@@ -1,38 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:form_craft/models/form_field.dart';
 
-class MultipleChoiceQuestion extends StatefulWidget {
-  final int id;
+typedef OptionChangedCallback = void Function(int, String);
+
+class MultipleChoiceQuestion extends StatelessWidget {
+  final FormFieldModel field;
   final VoidCallback onDelete;
+  final ValueChanged<String> onChanged;
+  final ValueChanged<int> onRemoveOption;
+  final OptionChangedCallback onOptionChanged;
+  final VoidCallback onAddOption;
 
   const MultipleChoiceQuestion({
     super.key,
-    required this.id,
+    required this.field,
     required this.onDelete,
+    required this.onChanged,
+    required this.onRemoveOption,
+    required this.onOptionChanged,
+    required this.onAddOption,
   });
-
-  @override
-  State<MultipleChoiceQuestion> createState() => _MultipleChoiceQuestionState();
-}
-
-class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
-  final List<String> _options = ['Option 1'];
-  final TextEditingController _optionController = TextEditingController();
-  String? _groupValue = 'Option 1';
-
-  void _addOption() {
-    if (_optionController.text.isNotEmpty) {
-      setState(() {
-        _options.add(_optionController.text);
-        _optionController.clear();
-      });
-    }
-  }
-
-  void _removeOption(int index) {
-    setState(() {
-      _options.removeAt(index);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +34,8 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    initialValue: 'Question',
+                    initialValue: field.question,
+                    onChanged: onChanged,
                     style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
@@ -59,52 +47,34 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.close, color: Colors.red),
-                  onPressed: widget.onDelete,
+                  onPressed: onDelete,
                 ),
               ],
             ),
             const SizedBox(height: 8.0),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: _options.length,
-              itemBuilder: (context, index) {
-                return Row(
-                  children: [
-                    Radio<String>(
-                      value: _options[index],
-                      groupValue: _groupValue,
-                      onChanged: (String? value) {
-                        setState(() {
-                          _groupValue = value;
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: Text(_options[index]),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () => _removeOption(index),
-                    ),
-                  ],
-                );
-              },
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _optionController,
-                    decoration: const InputDecoration(
-                      hintText: 'Add option',
+            for (int i = 0; i < field.options.length; i++)
+              Row(
+                children: [
+                  Radio(value: i, groupValue: -1, onChanged: (val) {}),
+                  Expanded(
+                    child: TextFormField(
+                      initialValue: field.options[i],
+                      onChanged: (value) => onOptionChanged(i, value),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: _addOption,
-                ),
-              ],
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => onRemoveOption(i),
+                  ),
+                ],
+              ),
+            TextButton.icon(
+              icon: const Icon(Icons.add),
+              label: const Text('Add Option'),
+              onPressed: onAddOption,
             ),
           ],
         ),

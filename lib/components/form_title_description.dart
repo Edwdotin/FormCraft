@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class FormTitleDescription extends StatelessWidget {
   final TextEditingController titleController;
+  final TextEditingController descriptionController;
 
-  const FormTitleDescription({super.key, required this.titleController});
+  const FormTitleDescription({
+    super.key,
+    required this.titleController,
+    required this.descriptionController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,7 @@ class FormTitleDescription extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              initialValue: '',
+              controller: descriptionController,
               maxLines: 3,
               decoration: const InputDecoration(
                 labelText: 'Form Description',

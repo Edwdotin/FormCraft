@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:form_craft/models/form_field.dart';
 
-class DropdownQuestion extends StatefulWidget {
-  final int id;
+typedef OptionChangedCallback = void Function(int, String);
+
+class DropdownQuestion extends StatelessWidget {
+  final FormFieldModel field;
   final VoidCallback onDelete;
+  final ValueChanged<String> onChanged;
+  final ValueChanged<int> onRemoveOption;
+  final OptionChangedCallback onOptionChanged;
+  final VoidCallback onAddOption;
 
   const DropdownQuestion({
     super.key,
-    required this.id,
+    required this.field,
     required this.onDelete,
+    required this.onChanged,
+    required this.onRemoveOption,
+    required this.onOptionChanged,
+    required this.onAddOption,
   });
-
-  @override
-  State<DropdownQuestion> createState() => _DropdownQuestionState();
-}
-
-class _DropdownQuestionState extends State<DropdownQuestion> {
-  final List<String> _options = ['Option 1', 'Option 2', 'Option 3'];
-  String? _selectedValue = 'Option 1';
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,8 @@ class _DropdownQuestionState extends State<DropdownQuestion> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    initialValue: 'Question',
+                    initialValue: field.question,
+                    onChanged: onChanged,
                     style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
@@ -43,24 +47,33 @@ class _DropdownQuestionState extends State<DropdownQuestion> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.close, color: Colors.red),
-                  onPressed: widget.onDelete,
+                  onPressed: onDelete,
                 ),
               ],
             ),
             const SizedBox(height: 8.0),
-            DropdownButton<String>(
-              value: _selectedValue,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedValue = newValue;
-                });
-              },
-              items: _options.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            for (int i = 0; i < field.options.length; i++)
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      initialValue: field.options[i],
+                      onChanged: (value) => onOptionChanged(i, value),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => onRemoveOption(i),
+                  ),
+                ],
+              ),
+            TextButton.icon(
+              icon: const Icon(Icons.add),
+              label: const Text('Add Option'),
+              onPressed: onAddOption,
             ),
           ],
         ),

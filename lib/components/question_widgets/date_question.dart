@@ -1,35 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:form_craft/models/form_field.dart';
 
-class DateQuestion extends StatefulWidget {
-  final int id;
+class DateQuestion extends StatelessWidget {
+  final FormFieldModel field;
   final VoidCallback onDelete;
+  final ValueChanged<String> onChanged;
 
   const DateQuestion({
     super.key,
-    required this.id,
+    required this.field,
     required this.onDelete,
+    required this.onChanged,
   });
-
-  @override
-  State<DateQuestion> createState() => _DateQuestionState();
-}
-
-class _DateQuestionState extends State<DateQuestion> {
-  DateTime? _selectedDate;
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +26,8 @@ class _DateQuestionState extends State<DateQuestion> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    initialValue: 'Question',
+                    initialValue: field.question,
+                    onChanged: onChanged,
                     style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
@@ -56,25 +39,22 @@ class _DateQuestionState extends State<DateQuestion> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.close, color: Colors.red),
-                  onPressed: widget.onDelete,
+                  onPressed: onDelete,
                 ),
               ],
             ),
             const SizedBox(height: 8.0),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    _selectedDate == null
-                        ? 'No date chosen!'
-                        : 'Picked Date: ${_selectedDate!.toLocal()}'.split(' ')[0],
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => _selectDate(context),
-                  child: const Text('Choose Date'),
-                ),
-              ],
+            TextButton.icon(
+              icon: const Icon(Icons.calendar_today),
+              label: const Text('Select Date'),
+              onPressed: () async {
+                final DateTime? picked = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+              },
             ),
           ],
         ),

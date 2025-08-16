@@ -1,14 +1,17 @@
 
 import 'package:flutter/material.dart';
+import 'package:form_craft/models/form_field.dart';
 
 class ShortAnswerQuestion extends StatelessWidget {
-  final int id;
+  final FormFieldModel field;
   final VoidCallback onDelete;
+  final ValueChanged<String> onChanged;
 
   const ShortAnswerQuestion({
     super.key,
-    required this.id,
+    required this.field,
     required this.onDelete,
+    required this.onChanged,
   });
 
   @override
@@ -24,7 +27,8 @@ class ShortAnswerQuestion extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextFormField(
-                    initialValue: 'Question',
+                    initialValue: field.question,
+                    onChanged: onChanged,
                     style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
